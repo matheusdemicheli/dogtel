@@ -59,9 +59,19 @@ class Dog(models.Model):
     """
     name = models.CharField(max_length=30)
 
+    photo = models.ImageField(upload_to='dogs/')
+
     breed = models.ForeignKey(
         to=Breed,
         on_delete=models.PROTECT
+    )
+
+    sub_breed = models.ForeignKey(
+        to=SubBreed,
+        on_delete=models.PROTECT,
+        verbose_name='Sub-Breed',
+        null=True,
+        blank=True
     )
 
     owner = models.ForeignKey(

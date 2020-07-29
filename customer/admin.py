@@ -1,36 +1,43 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from customer.models import Owner, Dog, Breed, SubBreed
-
-# Register your models here.
 
 class OwnerAdmin(admin.ModelAdmin):
     """
-    Owner's ModelAdmin.
+    Owner ModelAdmin.
     """
     search_fields = ['name']
 
 
 class BreedAdmin(admin.ModelAdmin):
     """
-    Breed's ModelAdmin.
+    Breed ModelAdmin.
     """
     search_fields = ['name']
 
 
 class SubBreedAdmin(admin.ModelAdmin):
     """
-    SubBreed's ModelAdmin.
+    SubBreed ModelAdmin.
     """
-    list_display = ['name', 'breed']
     search_fields = ['name', 'breed__name']
     autocomplete_fields = ['breed']
+    list_display = ['name', 'breed']
 
 
 class DogAdmin(admin.ModelAdmin):
     """
-    Dog's ModelAdmin.
+    Dog ModelAdmin.
     """
-    autocomplete_fields = ['owner', 'breed']
+    search_fields = ['name', 'owner__name']
+    autocomplete_fields = ['owner', 'breed', 'sub_breed']
+    list_display = ['name', 'owner', 'breed', 'sub_breed', 'img_photo']
+
+    def img_photo(self, obj):
+        """
+        Render the dog's photo.
+        """
+        return mark_safe('<img src="%s" width="70">' % obj.photo.url)
 
 
 admin.site.register(Dog, DogAdmin)
